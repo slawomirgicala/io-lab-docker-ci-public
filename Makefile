@@ -29,7 +29,7 @@ all: push
 
 image:
   # TODO: this build command is incomplete, add last flag of this command that tags image as latest upon building it
-	docker build \
+	sudo docker build \
 		--build-arg SCHEMA_NAME="$(SCHEMA_NAME)" \
 		--build-arg SCHEMA_DESCRIPTION="$(SCHEMA_DESCRIPTION)" \
 		--build-arg SCHEMA_URL="$(SCHEMA_URL)" \
@@ -39,12 +39,15 @@ image:
 		--build-arg SCHEMA_BUILD_DATE="$(SCHEMA_BUILD_DATE)" \
 		--build-arg SCHEMA_BUILD_VERSION="$(SCHEMA_BUILD_VERSION)" \
 		--build-arg SCHEMA_CMD="$(SCHEMA_CMD)" \
+		--tag "$(SCHEMA_NAME)":latest .
 	
   # TODO: last part of this command that tags just built image with a specyfic tag
+	sudo docker tag $(SCHEMA_NAME):latest $(SCHEMA_NAME):$(TAG)
 	
 push: image
 	# TODO: two commands, first pushes the latest image, second pushes the image tagged with specyfic tag
-	
+	sudo docker push $(SCHEMA_NAME):latest
+	sudo docker push $(SCHEMA_NAME):$(TAG)
 clean:
 
 .PHONY: clean image push all
